@@ -40,6 +40,23 @@
 #
 # pushButton.py runs with a systemd seervice:
 #   $ wget https://raw.githubusercontent.com/dumbo25/momentary-reset/master/pushButton.service
+#
+# Copy the systemd service file using:
+#   $ sudo cp pushButton.sevice /lib/systemd/system/.                 
+#
+# After any changes to /lib/systemd/system/pushButton.service:
+#    sudo systemctl daemon-reload
+#    sudo systemctl enable pushButton.service
+#    sudo reboot
+#
+# Ensure the run-fan.service in systemd is enabled and running:
+#    systemctl list-unit-files | grep enabled
+#    systemctl | grep running | grep pushButton
+#    systemctl status pushButton.service -l
+#
+# If there are any issues with starting the script using systemd,
+# then examine the journal using:
+
 
 #########################
 import RPi.GPIO as GPIO
