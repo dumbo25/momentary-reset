@@ -42,7 +42,7 @@
 #   $ wget https://raw.githubusercontent.com/dumbo25/momentary-reset/master/pushButton.service
 #
 # Copy the systemd service file using:
-#   $ sudo cp pushButton.sevice /lib/systemd/system/.                 
+#   $ sudo cp pushButton.service /lib/systemd/system/.                 
 #
 # After any changes to /lib/systemd/system/pushButton.service:
 #    sudo systemctl daemon-reload
