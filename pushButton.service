@@ -1,0 +1,17 @@
+[Unit]
+Description=reboot or shutdown Raspberry Pi using momentaty switch
+After=meadiacenter.service
+
+[Service]
+# If User and Group are not specified, then by default systemd ExecStart runs as root
+User=root
+Group=root
+Type=simple
+ExecStart=/usr/bin/python /home/osmc/pushButton.py
+# write to journal or within script to separate log file
+# StandardOutput=/home/osmc/pushButton.log
+# StandardError=/home/osmc/pushButton.log
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target
