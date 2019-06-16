@@ -56,7 +56,9 @@
 #
 # If there are any issues with starting the script using systemd,
 # then examine the journal using:
-
+#    sudo journalctl -u pushButton.service
+#
+#########################
 
 #########################
 import RPi.GPIO as GPIO
