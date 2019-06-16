@@ -50,7 +50,7 @@
 #    sudo reboot
 #
 # Ensure the run-fan.service in systemd is enabled and running:
-#    systemctl list-unit-files | grep enabled
+#    systemctl list-unit-files | grep enabled | grep pushButton
 #    systemctl | grep running | grep pushButton
 #    systemctl status pushButton.service -l
 #
