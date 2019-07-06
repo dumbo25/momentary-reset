@@ -1,0 +1,17 @@
+[Unit]
+Description=reboot or shutdown Raspberry Pi using on/off switch
+After=meadiacenter.service
+
+[Service]
+# If User and Group are not specified, then by default systemd ExecStart runs as root
+User=root
+Group=root
+Type=simple
+ExecStart=/usr/bin/python /home/osmc/onOff.py
+# write to journal or within script to separate log file
+# StandardOutput=/home/osmc/onOff.log
+# StandardError=/home/osmc/onOff.log
+Restart=Always
+
+[Install]
+WantedBy=multi-user.target
