@@ -12,8 +12,8 @@
 # Adafruit's momentary rugged blue led  button has five pins:
 #   +   = power, which attaches to GPIO_LED pin
 #   -   = ground, which attaches to ground
-#   NO1 = Normally open, which is attached to GPIO_RESET pin
-#   NC1 = Normally Closed, which is not used
+#   NO1 = Normally Open, which is attached to GPIO_IN pin
+#   NC1 = Normally Closed, which is attached to GPIO_OUT pin
 #   C1  = This is not used
 
 # I use three question (???) marks to indicate features that are not quite
@@ -107,10 +107,6 @@ def inFalling(channel):
     printMsg("   Falling edge detected, start time = " + str(StartTime))
     ButtonOut = False
 
-    # GPIO.remove_event_detect(GPIO_IN)
-
-    # GPIO.add_event_detect(GPIO_OUT, GPIO.FALLING, callback=outFalling, bouncetime=200)
-
 # normally closed
 def outFalling(channel):
     global ButtonOut
@@ -143,18 +139,15 @@ def outFalling(channel):
     # and it is probably the kids playing with it
     if buttonTime >= 10.0 and buttonTime < 60.0:
         printMsg("Shutting down")
-        # cmd = "sudo shutdown -h 0"
-        # subprocess.call(cmd, shell=True)
+        cmd = "sudo shutdown -h 0"
+        subprocess.call(cmd, shell=True)
     elif buttonTime >= 0.5 and buttonTime <= 5.0:
         printMsg("Rebooting")
-        # cmd = "sudo reboot"
-        # subprocess.call(cmd, shell=True)
+        cmd = "sudo reboot"
+        subprocess.call(cmd, shell=True)
     else:
         printMsg("ignoringing outInterrupt")
 
-    # GPIO.remove_event_detect(GPIO_OUT)
-
-    # GPIO.add_event_detect(GPIO_IN, GPIO.FALLING, callback=inFalling, bouncetime=200)
 
 #########################
 # start of main
