@@ -4,12 +4,10 @@
 #
 # onOff.py controls Adafruit's Rugged Metal Of/Off Switch with Blue
 # LED Ring. The script turns on the led when a Raspberry Pi is running, and it
-# will reboot the Raspberry Pi if the button is pushed or shutdown if held for
-# more than 5 seconds.
+# will reboot the Raspberry Pi if the button is pushed in and out in less than
+# 5 seconds, or shutdown if more than 5 seconds.
 #
-# The choice of a momentary push button was the wrong choice.
-#
-# Adafruit's momentary rugged blue led  button has five pins:
+# Adafruit's on/off rugged blue led  button has five pins:
 #   +   = power, which attaches to GPIO_LED pin
 #   -   = ground, which attaches to ground
 #   NO1 = Normally Open, which is attached to GPIO_IN pin
