@@ -7,7 +7,7 @@
 # will shutdown the Raspberry Pi if the button is pushed twice within 3 seconds
 # or reboot if pushed twice more than 10 seconds and less than 20 seconds apart.
 #
-# The choice of a momentary push button was the wrong choice.
+# The choice of a switch button was the wrong choice. I want a momentary push button
 #
 # Adafruit's momentary rugged blue led  button has five pins:
 #   +   = power, which attaches to GPIO_LED pin
