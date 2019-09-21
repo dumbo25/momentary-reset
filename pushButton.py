@@ -7,7 +7,7 @@
 # will shutdown the Raspberry Pi if the button is pushed twice within 3 seconds
 # or reboot if pushed twice more than 10 seconds and less than 20 seconds apart.
 #
-# The choice of a switch button was the wrong choice. I want a momentary push button
+# The choice of a momentary push button was the wrong choice.
 #
 # Adafruit's momentary rugged blue led  button has five pins:
 #   +   = power, which attaches to GPIO_LED pin
@@ -42,7 +42,7 @@
 #   $ wget https://raw.githubusercontent.com/dumbo25/momentary-reset/master/pushButton.service
 #
 # Copy the systemd service file using:
-#   $ sudo cp pushButton.service /lib/systemd/system/.                 
+#   $ sudo cp pushButton.service /lib/systemd/system/.
 #
 # After any changes to /lib/systemd/system/pushButton.service:
 #    sudo systemctl daemon-reload
@@ -77,9 +77,9 @@ GPIO_LED = 24
 #########################
 # Global Variables
 fileLog = open(HOME + '/pushButton.log', 'w+')
-firstPush = True
-lastTime = 0
-nextTime = 0
+noPush = True
+inTime = 0
+outTime = 0
 LEDon = True
 
 #########################
@@ -95,37 +95,38 @@ def printMsg(s):
 
 # from https://raspberrypi.stackexchange.com/questions/63512/how-can-i-detect-how-long-a-button-is-press$
 def resetInterrupt(channel):
-    global lastTime
-    global nextTime
-    global firstPush
+    global inTime
+    global outTime
+    global noPush
 
-    # print("in interrupt, channel = " + str(channel))
-    if firstPush:
-        lastTime = time.time()
-        firstPush = False
-        # print("last time = " + str(lastTime))
+    print("in interrupt, channel = " + str(channel))
+    if noPush:
+        inTime = time.time()
+        print("inTime = " + str(inTime))
+        noPush = False
         return
     else:
-        nextTime = time.time()
-        # print("next time = " + str(nextTime))
+        outTime = time.time()
+        print("outTime = " + str(outTime))
+        noPush = True
 
-    buttonTime = nextTime - lastTime
+        # button hold time
+        buttonTime = outTime - inTime
+        print("button time = " + str(buttonTime))
 
-    # print("button time = " + str(buttonTime))
+        inTime = 0
+        outTime = 0
 
     if buttonTime >= 10 and buttonTime <= 20:
-        # print("Shutting down")
+        print("Shutting down")
         printMsg("Shutting down")
         cmd = "sudo shutdown -h 0"
         subprocess.call(cmd, shell=True)
     elif buttonTime >= 0.5 and buttonTime <= 3:
-        # print("rebooting")
+        print("rebooting")
         printMsg("Rebooting")
         cmd = "sudo reboot"
         subprocess.call(cmd, shell=True)
-    elif buttonTime > 20:
-        # print("resetting last time = " + str(lastTime))
-        lastTime = nextTime
 
 #########################
 # start of main
@@ -137,19 +138,20 @@ GPIO.setwarnings(False)
 # turn on gpio pins
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(GPIO_RESET, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.add_event_detect(GPIO_RESET, GPIO.FALLING, callback=resetInterrupt)
+GPIO.add_event_detect(GPIO_RESET, GPIO.BOTH, callback=resetInterrupt)
+# GPIO.add_event_detect(GPIO_RESET, GPIO.FALLING, callback=resetInterrupt)
 
 GPIO.setup(GPIO_LED, GPIO.OUT)
 
 # turn on LED
 if LEDon:
-    # print("Push Button LED on")
+    print("Push Button LED on")
     GPIO.output(GPIO_LED,True)
 else:
-    # print("Push Button Ring LED off")
+    print("Push Button Ring LED off")
     GPIO.output(GPIO_LED,False)
 
-    try:
+try:
     while True:
         # there is no point in running all the time
         time.sleep(10000)
